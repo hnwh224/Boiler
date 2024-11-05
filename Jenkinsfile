@@ -11,7 +11,7 @@ pipeline {
 
     post {
         always {
-            archiveArtifacts artifacts: '**/build/libs/*.jar'
+            archiveArtifacts artifacts: '**/build/libs/Boiler-*-all.jar'
         }
         failure {
             echo 'Build failed!'
