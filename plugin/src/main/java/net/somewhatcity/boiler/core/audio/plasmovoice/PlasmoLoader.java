@@ -13,12 +13,15 @@ package net.somewhatcity.boiler.core.audio.plasmovoice;
 import de.maxhenkel.voicechat.api.BukkitVoicechatService;
 import net.somewhatcity.boiler.core.BoilerPlugin;
 import net.somewhatcity.boiler.core.audio.simplevoicechat.BoilerVoicechatPlugin;
-import su.plo.voice.api.server.PlasmoVoiceServer;
+
 
 public class PlasmoLoader {
-    private static BoilerPlasmoAddon plasmoAddon;
+    //private static BoilerPlasmoAddon plasmoAddon;
     public static void loadPlasmoVoice() {
+        /*
         plasmoAddon = new BoilerPlasmoAddon();
         PlasmoVoiceServer.getAddonsLoader().load(plasmoAddon);
+
+         */
     }
 }

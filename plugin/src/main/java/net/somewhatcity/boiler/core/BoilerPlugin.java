@@ -27,6 +27,9 @@ import net.somewhatcity.boiler.core.display.ImplDisplayManager;
 import net.somewhatcity.boiler.core.display.UpdateIntervalManager;
 import net.somewhatcity.boiler.core.gui.ImplGuiManager;
 import net.somewhatcity.boiler.core.listener.BoilerListener;
+import net.somewhatcity.boiler.core.listener.PlayerJoinListener;
+import net.somewhatcity.boiler.core.network.HandshakeResponseListener;
+import net.somewhatcity.boiler.core.network.StreamStateRequestListener;
 import net.somewhatcity.boiler.core.platform.ImplListenerBridge;
 import net.somewhatcity.boiler.core.platform.PlatformUtil;
 import net.somewhatcity.boiler.core.sources.*;
@@ -34,21 +37,29 @@ import net.somewhatcity.boiler.core.sources.hidden.DefaultSource;
 import net.somewhatcity.boiler.core.sources.hidden.ErrorSource;
 import net.somewhatcity.boiler.core.sources.VideoConverterSource;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bytedeco.ffmpeg.global.avutil;
 import org.bytedeco.javacv.FFmpegLogCallback;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.attribute.PosixFilePermission;
+import java.nio.file.attribute.PosixFilePermissions;
+import java.util.Locale;
+import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-
-import static org.bytedeco.ffmpeg.global.avutil.AV_LOG_PANIC;
-import static org.bytedeco.ffmpeg.global.avutil.av_log_set_level;
+import java.util.logging.Logger;
 
 public class BoilerPlugin extends JavaPlugin {
 
     public static final Executor EXECUTOR = Executors.newFixedThreadPool(1);
     public static MapEngineApi MAP_ENGINE;
+    public static Logger LOGGER;
     private static BoilerPlugin plugin;
     private IPlatform<?> platform;
     private ImplBoilerApi api;
@@ -56,19 +67,52 @@ public class BoilerPlugin extends JavaPlugin {
     private ISourceManager sourceManager;
     private IGuiManager guiManager;
     private UpdateIntervalManager intervalManager;
+
+    private MediaMtx mediaMtx;
+    private MediaMtxAuthServer mediaMtxAuthServer;
+
     @Override
     public void onLoad() {
         plugin = this;
         CommandAPI.onLoad(new CommandAPIBukkitConfig(this));
     }
+
     @Override
     public void onEnable() {
-        Util.initGstreamer();
+
+        FFmpegLogCallback.set();
+        avutil.av_log_set_level(avutil.AV_LOG_ERROR);
 
         new Metrics(this,18926);
-
         new BoilerConfig(this);
 
+        if(BoilerConfig.clientEnabled) {
+            mediaMtxAuthServer = new MediaMtxAuthServer();
+            String os = System.getProperty("os.name").toLowerCase(Locale.ROOT);
+            if(os.contains("win")) {
+                saveResource("mediamtx.exe", true);
+            }
+            else if(os.contains("nux")) {
+                saveResource("mediamtx", true);
+
+                try {
+                    File mediaMtx = new File(BoilerPlugin.getPlugin().getDataFolder(), "mediamtx");
+                    Set<PosixFilePermission> permissions = PosixFilePermissions.fromString("rwxr-xr-x");
+                    Files.setPosixFilePermissions(mediaMtx.toPath(), permissions);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            saveResource("mediamtx.yml", false);
+            mediaMtx = new MediaMtx();
+            mediaMtx.start();
+        }
+
+
+        Util.initGstreamer();
+
+        LOGGER = Bukkit.getLogger();
         MAP_ENGINE = Bukkit.getServicesManager().getRegistration(MapEngineApi.class).getProvider();
 
         this.platform = PlatformUtil.getPlatform(this, this.getClassLoader(), new ImplListenerBridge());
@@ -101,6 +145,9 @@ public class BoilerPlugin extends JavaPlugin {
         this.sourceManager.register("converter", VideoConverterSource.class);
         this.sourceManager.register("gstreamer", GstreamerSource.class);
         this.sourceManager.register("sysinfo", SystemInfoSource.class);
+        this.sourceManager.register("client", BoilerClientSource.class);
+        this.sourceManager.register("client-stream", BoilerClientStreamSource.class);
+        this.sourceManager.register("javafx", JavaFxTestSource.class);
 
         guiManager = new ImplGuiManager(this);
 
@@ -109,15 +156,32 @@ public class BoilerPlugin extends JavaPlugin {
 
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new BoilerListener(), this);
+        pm.registerEvents(new PlayerJoinListener(), this);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
             System.out.println("registering boiler commands...");
             new BoilerCommand();
         }, 10);
+
+        Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "boiler:handshake_request");
+        Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "mymod:test");
+        Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "boiler:display_create");
+        Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "boiler:display_remove");
+        Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "boiler:stream_data");
+        Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "boiler:stream_state_response");
+
+        Bukkit.getServer().getMessenger().registerIncomingPluginChannel(this, "boiler:stream_state_request", new StreamStateRequestListener());
+        Bukkit.getServer().getMessenger().registerIncomingPluginChannel(this, "boiler:handshake_response", new HandshakeResponseListener());
+    }
+
+    public static boolean hasBoilerMod(Player player) {
+        return player.hasMetadata("boiler_mod") && player.getMetadata("boiler_mod").get(0).asBoolean();
     }
 
     @Override
     public void onDisable() {
+        mediaMtx.stop();
+        mediaMtxAuthServer.stop();
         CommandAPI.onDisable();
     }
     public IDisplayManager displayManager() {
@@ -135,6 +199,12 @@ public class BoilerPlugin extends JavaPlugin {
     public UpdateIntervalManager intervalManager() {
         return intervalManager;
     }
+
+    public MediaMtxAuthServer mediaMtxAuthServer() {
+        return mediaMtxAuthServer;
+    }
+    public MediaMtx mediaMtx() { return mediaMtx; }
+
     public static BoilerPlugin getPlugin() {
         return plugin;
     }

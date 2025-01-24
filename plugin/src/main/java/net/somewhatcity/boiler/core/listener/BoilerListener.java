@@ -23,6 +23,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 
+import java.nio.charset.StandardCharsets;
+
 import static net.somewhatcity.boiler.core.BoilerPlugin.MAP_ENGINE;
 
 public class BoilerListener implements Listener {
@@ -62,14 +64,6 @@ public class BoilerListener implements Listener {
     public void onInteract(PlayerInteractEvent e) {
         if(!e.getPlayer().getWorld().getName().equals("boilerui")) return;
         e.setCancelled(true);
-    }
-
-    public void onPlayerJoin(PlayerJoinEvent e) {
-
-    }
-
-    public void onPlayerQuit(PlayerQuitEvent e) {
-
     }
 
 }

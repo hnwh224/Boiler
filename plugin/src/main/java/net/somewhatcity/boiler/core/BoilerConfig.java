@@ -19,6 +19,12 @@ public class BoilerConfig {
     public static String svcChannelName = "boiler";
     public static boolean useSvcGroups = false;
 
+    public static String rtmpHost = "0.0.0.0";
+    public static String rtmpBind = "0.0.0.0";
+    public static int rtmpPort = 1935;
+    public static String ffmpegLogLevel = "error";
+    public static boolean clientEnabled = false;
+
     public BoilerConfig(BoilerPlugin plugin) {
         this.plugin = plugin;
         plugin.saveDefaultConfig();
@@ -34,5 +40,13 @@ public class BoilerConfig {
         guiEnabled = config.getBoolean("boiler.settings.gui_enabled", false);
         svcChannelName = config.getString("boiler.settings.svc_channel_name", "boiler");
         //useSvcGroups = config.getBoolean("boiler.settings.use_svc_groups", false);
+        rtmpHost = config.getString("boiler.client.rtmp_host", "0.0.0.0");
+        rtmpBind = config.getString("boiler.client.rtmp_bind", "0.0.0.0");
+        rtmpPort = config.getInt("boiler.client.rtmp_port", 1935);
+
+        ffmpegLogLevel = config.getString("boiler.settings.ffmpeg_log_level", "error");
+        clientEnabled = config.getBoolean("boiler.settings.client.enabled", false);
+
+
     }
 }

@@ -29,7 +29,16 @@ import java.util.*;
 import java.util.List;
 
 public interface IBoilerSource {
+    /**
+     * called when the source gets loaded by a display
+     * @param display
+     * @param data
+     */
     void load(IBoilerDisplay display, JsonObject data);
+
+    /**
+     * called when the source gets unloaded by a display
+     */
     void unload();
     default void draw(IDrawingSpace drawingSpace) {
         drawingSpace.clear();
@@ -39,6 +48,12 @@ public interface IBoilerSource {
         draw(g, new Rectangle(0, 0, display.pixelWidth(), display.pixelHeight()));
         drawingSpace.image(img, 0, 0);
     }
+
+    /**
+     * called on rendering. Here you can draw things that will show up on the display
+     * @param g2
+     * @param viewport
+     */
     default void draw(Graphics2D g2, Rectangle viewport) {
         g2.setColor(Color.BLACK);
         g2.fill(viewport);
@@ -49,11 +64,40 @@ public interface IBoilerSource {
         return null;
     }
     default void onResize() {}
+
+    /**
+     * called when someone clicks the display
+     * @param sender the sender that clicked the display
+     * @param x X position of the cursor
+     * @param y Y position of the cursor
+     * @param right if the click was a right click
+     */
     default void onClick(CommandSender sender, int x, int y, boolean right) {}
+
+    /**
+     * called when someone scrolls while looking at the display
+     * @param sender the sender that scrolled
+     * @param x X position of the cursor
+     * @param y Y position of the cursor
+     * @param delta the amount of scroll
+     */
     default void onScroll(CommandSender sender, int x, int y, int delta) {}
+
+    /**
+     * called when someone presses a key. Only WASD, space and shift work and only when in GUI mode
+     * @param sender
+     * @param key
+     */
     default void onKey(CommandSender sender, String key) {}
+
+    /**
+     * called when someone inputs a string
+     * @param sender the sender that inputed the string
+     * @param input the input string
+     */
     default void onInput(CommandSender sender, String input) {}
     default void onCursorMove(CommandSender sender, int x, int y) {}
+
     default Map<String, CommandArgumentType> command() {
         return Collections.emptyMap();
     }

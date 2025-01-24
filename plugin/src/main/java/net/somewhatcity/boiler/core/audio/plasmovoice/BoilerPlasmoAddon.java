@@ -9,7 +9,7 @@
  */
 
 package net.somewhatcity.boiler.core.audio.plasmovoice;
-
+/*
 import su.plo.voice.api.addon.AddonInitializer;
 import su.plo.voice.api.addon.AddonLoaderScope;
 import su.plo.voice.api.addon.InjectPlasmoVoice;
@@ -57,3 +57,4 @@ public final class BoilerPlasmoAddon implements AddonInitializer {
         return addon;
     }
 }
+*/

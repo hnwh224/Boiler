@@ -12,34 +12,22 @@ package net.somewhatcity.boiler.core.audio.plasmovoice;
 
 import net.somewhatcity.boiler.api.display.IBoilerDisplay;
 import net.somewhatcity.boiler.core.audio.IBoilerAudioPlayer;
-import org.bukkit.Location;
-import org.jetbrains.annotations.NotNull;
-import su.plo.slib.api.server.position.ServerPos3d;
-import su.plo.slib.api.server.world.McServerWorld;
-import su.plo.voice.api.audio.codec.AudioEncoder;
-import su.plo.voice.api.audio.codec.CodecException;
-import su.plo.voice.api.encryption.Encryption;
-import su.plo.voice.api.encryption.EncryptionException;
-import su.plo.voice.api.server.PlasmoVoiceServer;
-import su.plo.voice.api.server.audio.line.ServerSourceLine;
-import su.plo.voice.api.server.audio.provider.AudioFrameProvider;
-import su.plo.voice.api.server.audio.provider.AudioFrameResult;
-import su.plo.voice.api.server.audio.source.AudioSender;
-import su.plo.voice.api.server.audio.source.ServerStaticSource;
+
 
 import java.util.ArrayDeque;
 import java.util.Queue;
 
 public class PlasmoAudioPlayer implements IBoilerAudioPlayer {
 
-    private PlasmoVoiceServer voiceServer;
-    private ServerStaticSource source;
-    private AudioSender audioSender;
+    //private PlasmoVoiceServer voiceServer;
+    //private ServerStaticSource source;
+    //private AudioSender audioSender;
     private boolean started = false;
     private boolean stop = false;
     private Queue<Short> audioQueue;
     @Override
     public void create(IBoilerDisplay display) {
+        /*
         audioQueue = new ArrayDeque<>();
         voiceServer = BoilerPlasmoAddon.plasmoVoiceServer();
 
@@ -65,10 +53,13 @@ public class PlasmoAudioPlayer implements IBoilerAudioPlayer {
         audioSender.onStop(() -> {
             source.remove();
         });
+
+         */
     }
 
     @Override
     public void play(byte[] samples) {
+        /*
         short[] audio = bytesToShorts(samples);
         for(short s : audio) {
             queue(s);
@@ -78,13 +69,18 @@ public class PlasmoAudioPlayer implements IBoilerAudioPlayer {
             audioSender.start();
             started = true;
         }
+
+         */
     }
 
     @Override
     public void destroy() {
+        /*
         stop = true;
         source.remove();
         audioSender.stop();
+
+         */
     }
 
     @Override
@@ -110,7 +106,7 @@ public class PlasmoAudioPlayer implements IBoilerAudioPlayer {
     public static short bytesToShort(byte b1, byte b2) {
         return (short) (((b2 & 0xFF) << 8) | (b1 & 0xFF));
     }
-
+    /*
     public class BoilerPlasmoAudioFrameProvider implements AudioFrameProvider {
 
         private AudioEncoder encoder;
@@ -150,5 +146,9 @@ public class PlasmoAudioPlayer implements IBoilerAudioPlayer {
                 throw new RuntimeException(e);
             }
         }
+
+
     }
+    */
+
 }

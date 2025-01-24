@@ -80,4 +80,32 @@ public abstract class BComponent {
             listener.onClick(new UiClickEvent(player, right));
         });
     }
+
+    public int width() {
+        return width;
+    }
+
+    public int height() {
+        return height;
+    }
+
+    public Color secondaryColor() {
+        return secondaryColor;
+    }
+
+    public Color primaryColor() {
+        return primaryColor;
+    }
+
+    public boolean visible() {
+        return visible;
+    }
+
+    public Color textColor() {
+        return textColor;
+    }
+
+    public String text() {
+        return text;
+    }
 }

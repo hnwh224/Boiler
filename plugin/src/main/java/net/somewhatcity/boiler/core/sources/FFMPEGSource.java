@@ -11,7 +11,6 @@
 package net.somewhatcity.boiler.core.sources;
 
 import com.google.gson.JsonObject;
-import de.pianoman911.mapengine.media.converter.MapEngineConverter;
 import net.somewhatcity.boiler.api.CreateArgument;
 import net.somewhatcity.boiler.api.CreateCommandArguments;
 import net.somewhatcity.boiler.api.IBoilerSource;
@@ -64,7 +63,6 @@ public class FFMPEGSource implements IBoilerSource {
                 grabber = new FFmpegFrameGrabber(streamUrl);
 
                 Java2DFrameConverter jconverter = new Java2DFrameConverter();
-                MapEngineConverter converter = new MapEngineConverter();
 
                 grabber.start();
 

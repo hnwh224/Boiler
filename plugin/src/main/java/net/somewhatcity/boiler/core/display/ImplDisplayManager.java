@@ -46,7 +46,8 @@ public class ImplDisplayManager implements IDisplayManager {
                 try {
                     Collection<? extends Player> players = Bukkit.getOnlinePlayers();
                     displays.forEach((key, value) -> {
-                        if(value.autoTick()) players.forEach(value::tick);
+                        //if(value.autoTick()) players.forEach(value::tick);
+                        value.tick();
                     });
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -126,7 +127,10 @@ public class ImplDisplayManager implements IDisplayManager {
                     loc.addProperty("x", location.getX());
                     loc.addProperty("y", location.getY());
                     loc.addProperty("z", location.getZ());
+                    speakers.add(loc);
                 });
+
+                obj.add("speakers", speakers);
 
                 Files.writeString(displayFile.toPath(), gson.toJson(obj));
 
@@ -229,12 +233,27 @@ public class ImplDisplayManager implements IDisplayManager {
                         sourceData = new JsonObject();
                     }
 
-
                     if(sourceName != null && sourceData != null) boilerDisplay.source(sourceName, sourceData);
                 }
 
                 if(obj.getAsJsonObject("settings") != null) {
                     boilerDisplay.settings(obj.getAsJsonObject("settings"));
+                }
+
+                if(obj.getAsJsonArray("speakers") != null) {
+                    JsonArray speakers = obj.getAsJsonArray("speakers");
+                    for(JsonElement s : speakers) {
+                        JsonObject speaker = s.getAsJsonObject();
+
+                        Location location = new Location(
+                                Bukkit.getWorld(speaker.get("world").getAsString()),
+                                speaker.get("x").getAsInt(),
+                                speaker.get("y").getAsInt(),
+                                speaker.get("z").getAsInt()
+                        );
+
+                        boilerDisplay.addSpeaker(location);
+                    }
                 }
 
                 displays.put(boilerDisplay.id(), boilerDisplay);

@@ -1,7 +1,22 @@
 boiler:
   settings:
     gui_enabled: false
+
+    # the default view distance for all displays. This can also be configured per display ingame
     view_distance: 100
+
+    # the simplevoicechat channel name for the displays
     svc_channel_name: "boiler"
+
+  # Settings for client mod support for bigger screens with better performance
+  client:
+    # if this function should be enabled
+    #
+    # WARNING:
+    # To use this function, you will need additional open ports for publishing the rtsp streams.
+    # The plugin will unpack and run MediaMTX (a stream server).
+    enabled: false
+
+# DO NOT CHANGE
 boiler.nextId: 0
 boiler.displays:

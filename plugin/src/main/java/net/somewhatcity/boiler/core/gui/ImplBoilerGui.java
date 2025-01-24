@@ -122,7 +122,7 @@ public class ImplBoilerGui implements IBoilerGui {
 
             guiListener.cursorPos.x  = (int) Util.map((float) yaw, -90, 90, 0, display.width());
             guiListener.cursorPos.y  = (int) Util.map((float) pitch, -90, 90, 0, display.height());
-            display.tick(player);
+            display.tick();
         }, 0, 1);
 
         display.mapDisplay().pipeline().addStream(new IPipelineStream() {

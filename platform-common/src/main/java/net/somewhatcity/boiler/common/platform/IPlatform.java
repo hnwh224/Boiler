@@ -20,6 +20,9 @@ public interface IPlatform<T> {
     String name();
     void sendPacket(Player player, PacketContainer<T> packet);
     void flush(Player player);
+    default byte[] createBoilerHandshakePacket(Player player) {
+        return new byte[0];
+    };
     PacketContainer<T> createArmorStandSpawnPacket(int entityId, Location loc);
     PacketContainer<T> createSetCameraPacket(int entityId);
     PacketContainer<T> createRemoveEntityPacket(int[] entities);

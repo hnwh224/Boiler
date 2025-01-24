@@ -23,5 +23,6 @@ public class DisplayCommand extends CommandAPICommand {
         withSubcommand(new DisplaySourceCommand());
         withSubcommand(new DisplaySettingsCommand());
         withSubcommand(new DisplayActionCommand());
+        withSubcommand(new DisplaySpeakerCommand());
     }
 }

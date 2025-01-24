@@ -12,7 +12,6 @@ package net.somewhatcity.boiler.core.audio.simplevoicechat;
 
 import de.maxhenkel.voicechat.api.BukkitVoicechatService;
 import net.somewhatcity.boiler.core.BoilerPlugin;
-import net.somewhatcity.boiler.core.audio.plasmovoice.BoilerPlasmoAddon;
 
 public class SvcLoader {
     private static BoilerVoicechatPlugin vcPlugin;

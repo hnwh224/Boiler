@@ -25,40 +25,134 @@ import java.util.Set;
 
 public interface IBoilerDisplay {
 
+    /**
+     * @return the id of the display
+     */
     int id();
+
+    /**
+     *
+     * @param name the name of the source to load
+     * @param data additional data that gets provided to the source on load
+     */
     void source(String name, JsonObject data);
+
+    /**
+     *
+     * @return the name of the currently loaded source
+     */
     String sourceName();
+
+    /**
+     *
+     * @return the object of the currently loaded source
+     */
     IBoilerSource source();
+
+    /**
+     *
+     * @return the data of the currently loaded source
+     */
     JsonObject sourceData();
+
+    /**
+     *
+     * @return the first corner of the display
+     */
     Location cornerA();
+
+    /**
+     *
+     * @return the second corner of the display
+     */
     Location cornerB();
+
+    /**
+     *
+     * @return the center of the display
+     */
     Location center();
+
+    /**
+     *
+     * @return display settings
+     */
     JsonObject settings();
+
+    /**
+     *
+     * @param obj the settings for the display
+     */
     void settings(JsonObject obj);
+
+    /**
+     *
+     * @return the BlockFace the display is facing
+     */
     BlockFace facing();
+
+    /**
+     *
+     * @return the MapDisplay provided by MapEngine
+     */
     IMapDisplay mapDisplay();
+
+    /**
+     *
+     * @return the drawingSpace provided by MapEngine
+     */
     IDrawingSpace drawingSpace();
+
+    /**
+     *
+     * @return the width of the display in pixels
+     */
     default int width() {
         return mapDisplay().pixelWidth();
     }
+
+    /**
+     *
+     * @return the height of the display in pixels
+     */
     default int height() {
         return mapDisplay().pixelHeight();
     }
+
     void viewport(Rectangle viewport);
     Rectangle viewport();
-    void tick(Player player);
+
+    /**
+     * ticks the display for all players (recalculates which players can see the display)
+     */
+    void tick();
     boolean autoTick();
     void autoTick(boolean value);
     boolean persistent();
     void persistent(boolean value);
     void renderPaused(boolean value);
     boolean renderPaused();
+
+    /**
+     * forces rendering of the display
+     */
     void render();
+
+    /**
+     * respawns the display
+     */
     void respawn();
-    byte[] provide20msAudio();
     void remove();
+
+    /**
+     *
+     * @return the url you can publish rtsp streams to. These streams will then get played back on client using the client mod
+     */
+    String rtspPublishUrl();
     Set<Player> viewers();
     List<Location> speakers();
+    void addSpeaker(Location location);
+    void clearSpeakers();
     void onClick(CommandSender player, int x, int y, boolean right);
     void onScroll(CommandSender player, int x, int y, int delta);
     void onInput(CommandSender player, String string);

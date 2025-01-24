@@ -10,7 +10,6 @@
 
 package net.somewhatcity.boiler.common;
 
-import com.sun.jna.internal.ReflectionUtils;
 import io.netty.buffer.Unpooled;
 import net.minecraft.SharedConstants;
 import net.minecraft.network.FriendlyByteBuf;
@@ -25,7 +24,6 @@ import net.somewhatcity.boiler.common.platform.PacketContainer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

@@ -19,6 +19,7 @@ import net.somewhatcity.boiler.api.display.IBoilerDisplay;
 import net.somewhatcity.boiler.api.util.CommandArgumentType;
 import net.somewhatcity.boiler.core.Util;
 import net.somewhatcity.boiler.core.audio.BAudioPlayer;
+import org.bytedeco.ffmpeg.global.avutil;
 import org.bytedeco.javacv.*;
 import org.bytedeco.javacv.Frame;
 
@@ -64,6 +65,7 @@ public class BufferedFFMPEGSource implements IBoilerSource {
 
         new Thread(() -> {
             try {
+
                 jconverter = new Java2DFrameConverter();
 
                 FFmpegFrameGrabber grabber = new FFmpegFrameGrabber(streamUrl);
