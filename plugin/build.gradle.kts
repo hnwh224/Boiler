@@ -2,7 +2,6 @@ plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("net.minecrell.plugin-yml.bukkit") version "0.6.0"
     id("com.modrinth.minotaur") version "2.+"
-    id("org.openjfx.javafxplugin") version "0.1.0"
 }
 
 repositories {
@@ -36,19 +35,16 @@ dependencies {
     implementation("io.netty:netty-buffer:4.1.116.Final")
     implementation("io.netty:netty-codec:4.1.116.Final")
 
-    compileOnlyApi("org.bytedeco:javacv-platform:1.5.11")
+    //compileOnlyApi("org.bytedeco:javacv-platform:1.5.11")
 
     api(project(":platform-common"))
 
     compileOnly("de.pianoman911:mapengine-api:1.8.7")
-    //compileOnly("de.pianoman911:mapengine-mediaext:1.1.3")
+    implementation("com.google.code.gson:gson:2.12.1")
+
+    compileOnly("de.pianoman911:mapengine-mediaext:1.1.3")
     //compileOnly("su.plo.voice.api:server:2.1.0-SNAPSHOT")
 
-}
-
-javafx {
-    version = "23.0.1"
-    modules = listOf("javafx.controls")
 }
 
 tasks {
@@ -75,7 +71,7 @@ bukkit {
     apiVersion = "1.20"
     authors = listOf("mrmrmystery")
     name = rootProject.name
-    depend = listOf("MapEngine", "FFmpeg")
+    depend = listOf("MapEngine", "MapMediaExt")
     softDepend = listOf("PlasmoVoice", "voicechat")
     version = rootProject.version.toString()
     //softDepend = listOf("voicechat")

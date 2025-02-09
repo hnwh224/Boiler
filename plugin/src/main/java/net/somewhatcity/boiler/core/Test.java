@@ -10,71 +10,61 @@
 
 package net.somewhatcity.boiler.core;
 
-import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.image.WritableImage;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
+import com.google.gson.Gson;
+import net.somewhatcity.boiler.api.util.GraphicUtils;
+import net.somewhatcity.boiler.core.keyboard.KeyModifier;
+import net.somewhatcity.boiler.core.keyboard.KeyboardKey;
+import net.somewhatcity.boiler.core.keyboard.Keyboard;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.Locale;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 public class Test {
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) throws IOException {
+        String json = Files.readString(Path.of("./kb_layout_de.json"));
 
+        Gson gson = new Gson();
 
+        Keyboard keyboard = gson.fromJson(json, Keyboard.class);
 
+        System.out.println(keyboard.layout);
 
-        Application.launch(AppStarter.class);
-    }
+        BufferedImage img = new BufferedImage(128 * 3, 128, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = img.createGraphics();
 
-    public static class AppStarter extends Application {
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, img.getWidth(), img.getHeight());
 
-        public AppStarter() {
+        g.setFont(new Font("Arial", Font.PLAIN, 11));
 
-        }
+        for(KeyboardKey key : keyboard.keys) {
+            System.out.println(Arrays.toString(key.bounds));
+            Rectangle rect = new Rectangle(key.bounds[0], key.bounds[1], key.bounds[2], key.bounds[3]);
+            g.setColor(Color.decode(key.backgroundColor));
+            g.fill(rect);
+            g.setColor(Color.decode(key.color));
 
-        @Override
-        public void start(Stage stage) throws Exception {
-            //stage.setTitle("JavaFX Without Extending Application");
+            if(key.modifiers != null) {
+                Optional<KeyModifier> optionalModifier = key.modifiers.stream().filter(mod -> mod.value.equals("shift")).findFirst();
 
-            StackPane root = new StackPane();
-
-
-            Button button = new Button("POMMES");
-
-            root.getChildren().add(button);
-
-            Scene scene = new Scene(root, 300, 300);
-
-            WritableImage writableImage = new WritableImage(300, 300);
-            root.snapshot(null, writableImage);
-
-            BufferedImage bufferedImage = new BufferedImage(300, 300, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g = bufferedImage.createGraphics();
-
-            for(int x = 0; x < 300; x++) {
-                for(int y = 0; y < 300; y++) {
-                    int color = writableImage.getPixelReader().getArgb(x, y);
-                    g.setColor(new Color(color));
-                    g.fillRect(x, y, 1, 1);
+                if(optionalModifier.isPresent()) {
+                    KeyModifier modifier = optionalModifier.get();
+                    GraphicUtils.centeredString(g, rect, modifier.text);
                 }
+            } else {
+                GraphicUtils.centeredString(g, rect, key.text);
             }
-
-            g.dispose();
-            ImageIO.write(bufferedImage, "png", new File("javafx.png"));
-
-
-
-            //stage.setScene(scene);
-            //stage.show();
         }
+
+        g.dispose();
+
+        ImageIO.write(img, "png", new File("kb.png"));
     }
 }

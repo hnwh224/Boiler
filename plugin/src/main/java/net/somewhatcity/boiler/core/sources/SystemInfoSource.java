@@ -42,7 +42,7 @@ public class SystemInfoSource implements IBoilerSource {
 
         g2.drawString("Boiler Version: " + Bukkit.getPluginManager().getPlugin("boiler").getPluginMeta().getVersion(), 10, 120);
         g2.drawString("MapEngine Version: " + Bukkit.getPluginManager().getPlugin("MapEngine").getPluginMeta().getVersion(), 10, 140);
-        g2.drawString("MapEngine-MediaExt Version: " + Bukkit.getPluginManager().getPlugin("MapMediaExt").getPluginMeta().getVersion(), 10, 160);
+        //g2.drawString("MapEngine-MediaExt Version: " + Bukkit.getPluginManager().getPlugin("MapMediaExt").getPluginMeta().getVersion(), 10, 160);
         g2.drawString("SimpleVoiceChat installed: " + Util.isPluginInstalled("voicechat"), 10, 180);
         g2.drawString("PlasmoVoice installed: " + Util.isPluginInstalled("PlasmoVoice"), 10, 200);
         g2.drawString("Gstreamer installed: " + Util.isGstreamerInstalled(), 10, 220);

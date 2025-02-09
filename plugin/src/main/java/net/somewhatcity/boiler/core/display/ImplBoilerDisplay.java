@@ -138,6 +138,7 @@ public class ImplBoilerDisplay implements IBoilerDisplay, Listener {
                         BoilerClientUtil.sendCreateDisplay(player, this, userStream);
                     } else {
                         MAP_DISPLAY.spawn(player);
+                        System.out.println("Spawning %s for %s".formatted(id(), player.getName()));
                         if(settings.has("itemRotation")) MAP_DISPLAY.itemRotation(player, settings.get("itemRotation").getAsInt());
                         if(settings.has("visualDirection")) MAP_DISPLAY.visualDirection(player, BlockFace.valueOf(settings.get("visualDirection").getAsString()));
                         if(settings.has("rotation")) MAP_DISPLAY.rotation(player, settings.getAsJsonObject("rotation").get("yaw").getAsFloat(), settings.getAsJsonObject("rotation").get("pitch").getAsFloat());
@@ -156,7 +157,9 @@ public class ImplBoilerDisplay implements IBoilerDisplay, Listener {
             }
         }
 
-        if(sourceConfig == null || sourceConfig.sourceType().equals(SourceType.SERVER)) {
+        if(sourceConfig != null && sourceConfig.sourceType().equals(SourceType.SERVER)) {
+            // nothing
+        } else {
             if(receivers.isEmpty() && renderTimer != null) {
                 renderTimer.cancel();
                 renderTimer = null;
@@ -165,7 +168,9 @@ public class ImplBoilerDisplay implements IBoilerDisplay, Listener {
                 renderTimer.schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        render();
+                        if(mapDisplay() != null) {
+                            render();
+                        }
                     }
                 }, 0, renderPeriod);
             }
@@ -257,6 +262,14 @@ public class ImplBoilerDisplay implements IBoilerDisplay, Listener {
                 ex.printStackTrace();
             }
         }
+
+        autoTick = false;
+        renderTimer.cancel();
+
+        receivers.forEach(player -> {
+            MAP_DISPLAY.despawn(player);
+        });
+        receivers.clear();
 
         MAP_DISPLAY = null;
 
@@ -353,7 +366,7 @@ public class ImplBoilerDisplay implements IBoilerDisplay, Listener {
         this.sourceData = data;
         this.sourceName = name;
 
-        g2.clearRect(0, 0, width(), height());
+        //g2.clearRect(0, 0, width(), height());
 
         if(persistent && !keepLastSourceData) {
             save();

@@ -19,6 +19,7 @@ import org.bukkit.entity.Player;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -53,6 +54,7 @@ public class SwingTest implements IBoilerSource {
         panel.add(checkbox);
 
         JTextField textField = new JTextField("kek");
+        textField.setPreferredSize(new Dimension(100, 100));
         panel.add(textField);
 
         //JScrollPane scrollPane = new JScrollPane(list);
@@ -108,6 +110,15 @@ public class SwingTest implements IBoilerSource {
 
         if(selected instanceof JTextField textField) {
             textField.setText(input);
+        }
+    }
+
+    @Override
+    public void onKey(CommandSender sender, String key) {
+        Component selected = panel.getComponentAt(lastClick);
+
+        if(selected instanceof JTextField textField) {
+            textField.setText(textField.getText() + key);
         }
     }
 }

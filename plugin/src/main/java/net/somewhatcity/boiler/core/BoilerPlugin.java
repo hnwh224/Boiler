@@ -147,7 +147,6 @@ public class BoilerPlugin extends JavaPlugin {
         this.sourceManager.register("sysinfo", SystemInfoSource.class);
         this.sourceManager.register("client", BoilerClientSource.class);
         this.sourceManager.register("client-stream", BoilerClientStreamSource.class);
-        this.sourceManager.register("javafx", JavaFxTestSource.class);
 
         guiManager = new ImplGuiManager(this);
 

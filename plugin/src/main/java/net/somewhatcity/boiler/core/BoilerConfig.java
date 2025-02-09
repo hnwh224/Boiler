@@ -42,11 +42,10 @@ public class BoilerConfig {
         //useSvcGroups = config.getBoolean("boiler.settings.use_svc_groups", false);
         rtmpHost = config.getString("boiler.client.rtmp_host", "0.0.0.0");
         rtmpBind = config.getString("boiler.client.rtmp_bind", "0.0.0.0");
-        rtmpPort = config.getInt("boiler.client.rtmp_port", 1935);
+        rtmpPort = config.getInt("boiler.client.rtmp_port", 8554);
 
         ffmpegLogLevel = config.getString("boiler.settings.ffmpeg_log_level", "error");
         clientEnabled = config.getBoolean("boiler.settings.client.enabled", false);
-
 
     }
 }

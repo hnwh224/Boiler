@@ -1,0 +1,50 @@
+{
+	"layout": "ISO-DE",
+	"keys": [
+		{
+			"bounds": [1, 1, 20, 20],
+			"text": "esc",
+			"action": 27,
+			"backgroundColor": "#FF6A00",
+			"color": "#ffffff"
+		},
+		{
+			"bounds": [1, 23, 20, 20],
+			"text": "^",
+			"action": 27,
+			"backgroundColor": "#D9D9D9",
+			"color": "#000000",
+			"modifiers": [
+				{ "value": "shift", "text": "°" }
+			]
+		},
+		{
+			"bounds": [1, 44, 31, 20],
+			"text": "tab",
+			"action": 16,
+			"backgroundColor": "#747474",
+			"color": "#ffffff"
+		},
+		{
+			"bounds": [1, 65, 37, 20],
+			"text": "caps",
+			"action": "20",
+			"backgroundColor": "#747474",
+			"color": "#ffffff"
+		},
+		{
+			"bounds": [1, 86, 26, 20],
+			"text": "shift",
+			"action": 16,
+			"backgroundColor": "#747474",
+			"color": "#ffffff"
+		},
+		{
+			"bounds": [1, 107, 26, 20],
+			"text": "ctrl",
+			"action": 17,
+			"backgroundColor": "#747474",
+			"color": "#ffffff"
+		}
+	]
+}
