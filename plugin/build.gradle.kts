@@ -17,13 +17,15 @@ repositories {
 }
 
 dependencies {
+    /*
     runtimeOnly(project(":platform-paper-1.20"))
     runtimeOnly(project(":platform-paper-1.20.2"))
     runtimeOnly(project(":platform-paper-1.20.3"))
     runtimeOnly(project(":platform-paper-1.20.5"))
     runtimeOnly(project(":platform-paper-1.21.2"))
+     */
 
-    implementation("dev.jorel:commandapi-bukkit-shade:9.7.0")
+    implementation("dev.jorel:commandapi-bukkit-shade:10.1.2")
     implementation("de.maxhenkel.voicechat:voicechat-api:2.4.11")
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
     implementation("uk.co.caprica:vlcj:4.8.2")
@@ -37,7 +39,7 @@ dependencies {
 
     //compileOnlyApi("org.bytedeco:javacv-platform:1.5.11")
 
-    api(project(":platform-common"))
+    api(project(":api"))
 
     compileOnly("de.pianoman911:mapengine-api:1.8.7")
     implementation("com.google.code.gson:gson:2.12.1")

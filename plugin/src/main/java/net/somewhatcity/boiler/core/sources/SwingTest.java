@@ -25,9 +25,10 @@ import java.util.UUID;
 
 public class SwingTest implements IBoilerSource {
 
-    private JPanel panel = new JPanel();
+    private JPanel panel = new DSPPipelinePanel();
     private JFileChooser fileChooser;
     private Player player;
+    private Dimension dimension;
 
     private Point lastClick;
     @Override
@@ -36,53 +37,26 @@ public class SwingTest implements IBoilerSource {
             player = Bukkit.getPlayer(UUID.fromString(data.get("gui_player").getAsString()));
         }
 
-        Dimension dimension = new Dimension(display.width(), display.height());
+        dimension = new Dimension(display.width(), display.height());
 
         panel.setSize(dimension);
         panel.setMinimumSize(dimension);
         panel.setMaximumSize(dimension);
         panel.setPreferredSize(dimension);
-        panel.setLayout(new FlowLayout());
-
-        JButton button = new JButton("click me");
-        button.addActionListener(e -> {
-            player.sendMessage("click");
-        });
-        panel.add(button);
-
-        JCheckBox checkbox = new JCheckBox();
-        panel.add(checkbox);
-
-        JTextField textField = new JTextField("kek");
-        textField.setPreferredSize(new Dimension(100, 100));
-        panel.add(textField);
-
-        //JScrollPane scrollPane = new JScrollPane(list);
-        //panel.add(scrollPane);
-
-        JRadioButton radio0 = new JRadioButton();
-        JRadioButton radio1 = new JRadioButton();
-        ButtonGroup radioGroup = new ButtonGroup();
-        radioGroup.add(radio0);
-        radioGroup.add(radio1);
-        panel.add(radio0);
-        panel.add(radio1);
-
-        JProgressBar progressBar = new JProgressBar();
-        progressBar.setValue(50);
-        panel.add(progressBar);
-
-        JColorChooser colorChooser = new JColorChooser();
-        panel.add(colorChooser);
 
 
+        panel.revalidate();
         panel.doLayout();
-        panel.validate();
+        panel.revalidate();
     }
 
     @Override
     public void draw(Graphics2D g2, Rectangle viewport) {
-        panel.paint(g2);
+        panel.setSize(dimension);
+        panel.doLayout();
+        panel.revalidate();
+        panel.validate();
+        panel.printAll(g2);
     }
 
     @Override

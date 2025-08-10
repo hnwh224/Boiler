@@ -17,7 +17,6 @@ import net.somewhatcity.boiler.api.BoilerApi;
 import net.somewhatcity.boiler.api.IDisplayManager;
 import net.somewhatcity.boiler.api.ISourceManager;
 import net.somewhatcity.boiler.api.display.IGuiManager;
-import net.somewhatcity.boiler.common.platform.IPlatform;
 import net.somewhatcity.boiler.core.api.ImplBoilerApi;
 import net.somewhatcity.boiler.core.audio.plasmovoice.PlasmoLoader;
 import net.somewhatcity.boiler.core.audio.simplevoicechat.SvcLoader;
@@ -25,13 +24,10 @@ import net.somewhatcity.boiler.core.commands.BoilerCommand;
 import net.somewhatcity.boiler.core.display.BoilerSourceManager;
 import net.somewhatcity.boiler.core.display.ImplDisplayManager;
 import net.somewhatcity.boiler.core.display.UpdateIntervalManager;
-import net.somewhatcity.boiler.core.gui.ImplGuiManager;
 import net.somewhatcity.boiler.core.listener.BoilerListener;
 import net.somewhatcity.boiler.core.listener.PlayerJoinListener;
 import net.somewhatcity.boiler.core.network.HandshakeResponseListener;
 import net.somewhatcity.boiler.core.network.StreamStateRequestListener;
-import net.somewhatcity.boiler.core.platform.ImplListenerBridge;
-import net.somewhatcity.boiler.core.platform.PlatformUtil;
 import net.somewhatcity.boiler.core.sources.*;
 import net.somewhatcity.boiler.core.sources.hidden.DefaultSource;
 import net.somewhatcity.boiler.core.sources.hidden.ErrorSource;
@@ -61,11 +57,9 @@ public class BoilerPlugin extends JavaPlugin {
     public static MapEngineApi MAP_ENGINE;
     public static Logger LOGGER;
     private static BoilerPlugin plugin;
-    private IPlatform<?> platform;
     private ImplBoilerApi api;
     private IDisplayManager displayManager;
     private ISourceManager sourceManager;
-    private IGuiManager guiManager;
     private UpdateIntervalManager intervalManager;
 
     private MediaMtx mediaMtx;
@@ -115,7 +109,7 @@ public class BoilerPlugin extends JavaPlugin {
         LOGGER = Bukkit.getLogger();
         MAP_ENGINE = Bukkit.getServicesManager().getRegistration(MapEngineApi.class).getProvider();
 
-        this.platform = PlatformUtil.getPlatform(this, this.getClassLoader(), new ImplListenerBridge());
+        //this.platform = PlatformUtil.getPlatform(this, this.getClassLoader(), new ImplListenerBridge());
 
         CommandAPI.onEnable();
 
@@ -148,7 +142,6 @@ public class BoilerPlugin extends JavaPlugin {
         this.sourceManager.register("client", BoilerClientSource.class);
         this.sourceManager.register("client-stream", BoilerClientStreamSource.class);
 
-        guiManager = new ImplGuiManager(this);
 
         this.api = new ImplBoilerApi(this);
         Bukkit.getServicesManager().register(BoilerApi.class, api, this, ServicePriority.Normal);
@@ -188,12 +181,6 @@ public class BoilerPlugin extends JavaPlugin {
     }
     public ISourceManager sourceManager() {
         return sourceManager;
-    }
-    public IGuiManager guiManager() {
-        return guiManager;
-    }
-    public IPlatform<?> platform() {
-        return platform;
     }
     public UpdateIntervalManager intervalManager() {
         return intervalManager;

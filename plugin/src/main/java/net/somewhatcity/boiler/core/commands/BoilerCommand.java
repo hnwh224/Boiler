@@ -17,9 +17,9 @@ public class BoilerCommand extends CommandAPICommand {
         super("boiler");
         withSubcommand(new HelpCommand());
         withSubcommand(new DisplayCommand());
-        withSubcommand(new GuiCommand());
         withSubcommand(new UpdateIntervalCommand());
         withSubcommand(new BoilerClientCommand());
+        withSubcommand(new InfoCommand());
         register();
     }
 }
